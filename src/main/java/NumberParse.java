@@ -12,31 +12,36 @@ public class NumberParse {
         public static int parseToInt(String numeral){
             ArrayList<String> numeralArray = new ArrayList<>();
             int number = 0;
-            int wordCount = 0;
+
             for(String numeralWord :numeral.split(" ")){
                 numeralArray.add(numeralWord);
             }
+            int wordCount = numeralArray.size() - 1;
 
-            while(wordCount < numeralArray.size() &&
+            while(wordCount >= 0 &&
                     !compound_numerals.containsKey(numeralArray.get(wordCount))){
+
                 if(simple_numbers.containsKey(numeralArray.get(wordCount))){
                     number += simple_numbers.get(numeralArray.get(wordCount));
-
+                    System.out.print("simple num " + number+"\n");
                 }
                 else if(decades.containsKey(numeralArray.get(wordCount))){
                     number += decades.get(numeralArray.get(wordCount));
+                    System.out.print("decades " + number+"\n");
                 }
-                wordCount++;
+                wordCount--;
             }
-            while (wordCount < numeralArray.size()){
-                int nextSimpleNum = wordCount + 1;
+            while (wordCount > 0){
+                int nextSimpleNum = wordCount - 1;
+                System.out.println(wordCount+ " " + numeralArray.get(wordCount));
                 number +=
                         compound_numerals.get(numeralArray.get(wordCount))
                                 *
                                 simple_numbers.get(numeralArray.get(nextSimpleNum));
-                wordCount+=2;
+                wordCount-=2;
 
             }
+            System.out.println("number = " + number);
             return number;
 
         }
@@ -76,7 +81,7 @@ public class NumberParse {
             decades.put("ninety",90);
 
             compound_numerals.put("hundred",100);
-            compound_numerals.put("thousand",100);
+            compound_numerals.put("thousand",1000);
             //nine thousand nine hundred ninety nine 9999
         }
 
